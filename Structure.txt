@@ -1,0 +1,5 @@
+.git        Git directory
+bin         Potentialy releasable binaries
+build       Build Infrastructure
+scripts     Scripts (can be launching artifacts from binaries)
+src         Sources
