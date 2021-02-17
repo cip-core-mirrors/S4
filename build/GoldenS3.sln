@@ -2,18 +2,32 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 15.0.26730.12
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3ProxyPOC", "..\src\S3ProxyPOC\S3ProxyPOC.csproj", "{D9DC98B4-036A-4F0A-86F4-AD04855031C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3Proxy", "..\src\S3ProxyPOC\S3Proxy.csproj", "{D9DC98B4-036A-4F0A-86F4-AD04855031C6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3ProxyHost", "..\src\Host\S3ProxyHost\S3ProxyHost.csproj", "{69E647A3-4351-41E0-B7D9-F1934D9439E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9DC98B4-036A-4F0A-86F4-AD04855031C6}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{D9DC98B4-036A-4F0A-86F4-AD04855031C6}.Debug|x64.ActiveCfg = Debug|x64
 		{D9DC98B4-036A-4F0A-86F4-AD04855031C6}.Debug|x64.Build.0 = Debug|x64
+		{D9DC98B4-036A-4F0A-86F4-AD04855031C6}.Release|Any CPU.ActiveCfg = Release|x64
 		{D9DC98B4-036A-4F0A-86F4-AD04855031C6}.Release|x64.ActiveCfg = Release|x64
 		{D9DC98B4-036A-4F0A-86F4-AD04855031C6}.Release|x64.Build.0 = Release|x64
+		{69E647A3-4351-41E0-B7D9-F1934D9439E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69E647A3-4351-41E0-B7D9-F1934D9439E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69E647A3-4351-41E0-B7D9-F1934D9439E2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{69E647A3-4351-41E0-B7D9-F1934D9439E2}.Debug|x64.Build.0 = Debug|Any CPU
+		{69E647A3-4351-41E0-B7D9-F1934D9439E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69E647A3-4351-41E0-B7D9-F1934D9439E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69E647A3-4351-41E0-B7D9-F1934D9439E2}.Release|x64.ActiveCfg = Release|Any CPU
+		{69E647A3-4351-41E0-B7D9-F1934D9439E2}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
