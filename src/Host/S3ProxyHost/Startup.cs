@@ -6,10 +6,10 @@ using Amazon.Runtime.CredentialManagement;
 using ABSA.RD.S3Proxy.Misc;
 using ABSA.RD.S3Proxy;
 
-namespace S3ProxyHost
+namespace ABSA.RD.S3ProxyHost
 {
     public class Startup
-    {       
+    {
         public void ConfigureServices(IServiceCollection services)
         {
             var config = new S3Config
@@ -32,12 +32,11 @@ namespace S3ProxyHost
                 {
                     await worker.Run(context);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
 
                 }
-
             });
         }
-    }    
+    }
 }

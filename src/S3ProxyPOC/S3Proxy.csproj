@@ -3,7 +3,7 @@
     <RootNamespace>ABSA.RD.S3Proxy</RootNamespace>
     <Platforms>x64</Platforms>
     <TargetFrameworks>netstandard2.1</TargetFrameworks>
-    <OutputPath>$(SolutionDir)..\bin\S3ProxyPOC\$(Configuration)\</OutputPath>
+    <OutputPath>$(SolutionDir)..\bin\S3Proxy\$(Configuration)\</OutputPath>
     <PublishDir>$(OutputPath)\$(TargetFramework)\</PublishDir>
     <DefineConstants>$(DefineConstants);Monitoring</DefineConstants>
   </PropertyGroup>

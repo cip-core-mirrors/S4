@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace S3ProxyHost
+namespace ABSA.RD.S3ProxyHost
 {
     public class Program
     {
