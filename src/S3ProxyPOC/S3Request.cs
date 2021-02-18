@@ -1,9 +1,9 @@
-﻿using ABSA.RD.S3Proxy.Misc;
+﻿using ABSA.RD.S4.S3Proxy.Misc;
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using System;
 
-namespace ABSA.RD.S3Proxy
+namespace ABSA.RD.S4.S3Proxy
 {
     class S3Request
     {

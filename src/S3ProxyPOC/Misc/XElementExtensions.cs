@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Xml.Linq;
 
-namespace ABSA.RD.S3Proxy.Misc
+namespace ABSA.RD.S4.S3Proxy.Misc
 {
     public static class XElementExtensions
     {

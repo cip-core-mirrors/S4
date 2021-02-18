@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Linq;
 
-namespace ABSA.RD.S3Proxy.Misc
+namespace ABSA.RD.S4.S3Proxy.Misc
 {
     public static class HttpRequestExtensions
     {
