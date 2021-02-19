@@ -1,7 +1,7 @@
 # S4
 
 ## About
-S4 is adapter on top of S3 handling caching, deudplication, compression and bulked compression
+S4 is adapter on top of S3 handling caching, deduplication, compression and bulked compression
 
 ## Solution structure
 |Directory | Description                                         |
