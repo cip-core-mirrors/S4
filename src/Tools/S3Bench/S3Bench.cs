@@ -22,6 +22,10 @@ namespace ABSA.RD.S4.S3Bench
 
         public void RunTest()
         {
+            Console.WriteLine($"Threads:      {_settings.Threads}");
+            Console.WriteLine($"Items/Thread: {_settings.ItemsPerThread}");
+            Console.WriteLine($"Item Size:    {_settings.ItemSize}");
+
             RunPuts();
             for (var i = 0; i < _settings.Iterations; ++i)
                 RunGets();
@@ -103,7 +107,11 @@ namespace ABSA.RD.S4.S3Bench
         {
             var totalItems = _settings.Threads * _settings.ItemsPerThread;
             var totalSize = totalItems * _settings.ItemSize;
-            Console.WriteLine($"{operation,7} | {elapsed} | {totalItems / elapsed.TotalSeconds, 11} /s | {totalSize / elapsed.TotalSeconds,11} B/s");
+            var speedInBytes = (int)(totalSize / elapsed.TotalSeconds);
+            var unit = GetUnit(speedInBytes, out var mulKoef);
+            Console.WriteLine($"{operation,7} | {elapsed} | {(int)(totalItems / elapsed.TotalSeconds), 11} /s | {speedInBytes / mulKoef,11} {unit}/s");
+
+            Console.WriteLine();
         }
 
         private void PrintStats(string title, TimeSpan[] timings, bool withbps)
@@ -112,6 +120,7 @@ namespace ABSA.RD.S4.S3Bench
 
             const int align = 7;
             const int titleAlign = 7;
+            var mulKoef = 1;
             var min = timings[0];
             var avg = TimeSpan.FromSeconds(timings.Average(x => x.TotalSeconds));
             var max = timings[^1];
@@ -119,28 +128,32 @@ namespace ABSA.RD.S4.S3Bench
             Func<int, TimeSpan> perc = p => timings[timings.Length * p / 100];
             Func<string, string> lbl = l => $"{l,align}";
             Func<TimeSpan, string> time = t => $"{(int)t.TotalMilliseconds,align}";
-            Func<TimeSpan, string> speed = t => $"{(int)(_settings.ItemSize / t.TotalSeconds),align}";
+            Func<TimeSpan, string> speed = t => $"{(int)(_settings.ItemSize / t.TotalSeconds / mulKoef),align}";
 
             Console.WriteLine($"{title,titleAlign}{lbl("AVG")}{lbl("MIN")}{lbl("P10")}{lbl("P25")}{lbl("P50")}{lbl("P75")}{lbl("P90")}{lbl("P95")}{lbl("P99")}{lbl("MAX")}");
             Console.WriteLine($"{" ms",titleAlign}{time(avg)}{time(min)}{time(perc(10))}{time(perc(25))}{time(perc(50))}{time(perc(75))}{time(perc(90))}{time(perc(95))}{time(perc(99))}{time(max)}");
 
             if (withbps)
             {
-                var mul = MulIndex((int)(_settings.ItemSize / min.TotalSeconds));
-                Console.WriteLine($"{$" {Mul[mul]}/s",titleAlign}{speed(avg)}{speed(min)}{speed(perc(10))}{speed(perc(25))}{speed(perc(50))}{speed(perc(75))}{speed(perc(90))}{speed(perc(95))}{speed(perc(99))}{speed(max)}");
+                var unit = GetUnit((int)(_settings.ItemSize / min.TotalSeconds), out mulKoef);
+                Console.WriteLine($"{$" {unit}/s",titleAlign}{speed(avg)}{speed(min)}{speed(perc(10))}{speed(perc(25))}{speed(perc(50))}{speed(perc(75))}{speed(perc(90))}{speed(perc(95))}{speed(perc(99))}{speed(max)}");
             }
+
+            Console.WriteLine();
         }
 
-        private int MulIndex(int value)
+        private string GetUnit(int value, out int koef)
         {
             var index = 0;
+            koef = 1;
             while (value > 1024)
             {
+                koef *= 1024;
                 value /= 1024;
                 ++index;
             }
 
-            return index;
+            return Mul[index];
         }
     }
 }

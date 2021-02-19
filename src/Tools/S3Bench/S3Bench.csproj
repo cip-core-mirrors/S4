@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <RootNamespace>ABSA.RD.S4.S3Bench</RootNamespace>
     <Platforms>x64</Platforms>
-    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <OutputPath>$(SolutionDir)..\bin\Tools\$(Configuration)\</OutputPath>
     <PublishDir>$(OutputPath)\$(TargetFramework)\</PublishDir>
     <DefineConstants>$(DefineConstants);Monitoring</DefineConstants>

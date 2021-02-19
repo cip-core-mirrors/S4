@@ -3,6 +3,7 @@
     public class S3Settings
     {
         public string Region { get; set; }
+        public string Endpoint { get; set; }
         public string Bucket { get; set; }
         public string Prefix { get; set; }
         public string KmsKey { get; set; }

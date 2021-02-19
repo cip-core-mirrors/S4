@@ -1,5 +1,6 @@
 ﻿using ABSA.RD.S4.S3Bench.Settings;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace ABSA.RD.S4.S3Bench
 {
@@ -12,6 +13,8 @@ namespace ABSA.RD.S4.S3Bench
             var s3Handler = new S3Handler(config.GetSection("S3").Get<S3Settings>());
             var bench = new S3Bench(s3Handler, config.GetSection("Bench").Get<BenchSettings>());
             bench.RunTest();
+            Console.WriteLine("FINISHED");
+            Console.ReadKey();
         }
     }
 }
