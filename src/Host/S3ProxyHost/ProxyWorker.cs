@@ -1,8 +1,8 @@
-﻿using ABSA.RD.S3Proxy.Proxy;
+﻿using ABSA.RD.S4.S3Proxy.Proxy;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
-namespace ABSA.RD.S3ProxyHost
+namespace ABSA.RD.S4.S3ProxyHost
 {
     class ProxyWorker
     {

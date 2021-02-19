@@ -1,6 +1,6 @@
-﻿using ABSA.RD.S3Proxy.Proxy;
+﻿using ABSA.RD.S4.S3Proxy.Proxy;
 
-namespace ABSA.RD.S3Proxy
+namespace ABSA.RD.S4.S3Proxy
 {
     class S3Response : ProxyResponse
     {

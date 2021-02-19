@@ -1,4 +1,4 @@
-﻿using ABSA.RD.S3Proxy.Proxy;
+﻿using ABSA.RD.S4.S3Proxy.Proxy;
 using Amazon;
 using Amazon.Runtime;
 using Amazon.Runtime.CredentialManagement;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net;
 
-namespace ABSA.RD.S3Proxy.Misc
+namespace ABSA.RD.S4.S3Proxy.Misc
 {
     public static class ServiceCollectionExtensions
     {

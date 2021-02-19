@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace ABSA.RD.S3Proxy.Misc
+namespace ABSA.RD.S4.S3Proxy.Misc
 {
     public static class S3ApiResponseConverter
     {

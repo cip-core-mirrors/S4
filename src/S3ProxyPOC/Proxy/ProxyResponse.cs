@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ABSA.RD.S3Proxy.Proxy
+namespace ABSA.RD.S4.S3Proxy.Proxy
 {
     public class ProxyResponse
     {

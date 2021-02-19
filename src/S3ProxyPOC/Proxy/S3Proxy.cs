@@ -3,9 +3,9 @@ using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
-using ABSA.RD.S3Proxy.Misc;
+using ABSA.RD.S4.S3Proxy.Misc;
 
-namespace ABSA.RD.S3Proxy.Proxy
+namespace ABSA.RD.S4.S3Proxy.Proxy
 {
     class S3Proxy : IProxy
     {

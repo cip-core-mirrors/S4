@@ -1,4 +1,4 @@
-﻿namespace ABSA.RD.S3Proxy
+﻿namespace ABSA.RD.S4.S3Proxy
 {
     public class S3Config
     {

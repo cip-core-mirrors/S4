@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-      <RootNamespace>ABSA.RD.S3ProxyHost</RootNamespace>
+      <RootNamespace>ABSA.RD.S4.S3ProxyHost</RootNamespace>
       <Platforms>x64</Platforms>
       <TargetFramework>netcoreapp3.1</TargetFramework>
       <OutputPath>$(SolutionDir)..\bin\S3ProxyHost\$(Configuration)\</OutputPath>
