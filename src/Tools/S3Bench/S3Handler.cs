@@ -29,7 +29,10 @@ namespace ABSA.RD.S4.S3Bench
             var s3cfg = new AmazonS3Config { RegionEndpoint = RegionEndpoint.GetBySystemName(_settings.Region) };
 
             if (!string.IsNullOrEmpty(_settings.Endpoint))
+            {
                 s3cfg.ServiceURL = _settings.Endpoint;
+                s3cfg.ForcePathStyle = true;
+            }
 
             if (_settings.NoProxy)
                 s3cfg.SetWebProxy(new WebProxy());
@@ -46,16 +49,9 @@ namespace ABSA.RD.S4.S3Bench
             _client = new AmazonS3Client(credentials, s3cfg);
         }
 
-        private void Test3() // REMOVE ME
-        {
-            var response = _client.ListBucketsAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-            foreach (S3Bucket b in response.Buckets)
-                Console.WriteLine("{0}\t{1}", b.BucketName, b.CreationDate);
-        }
-
         public void Put(byte[] data, string id)
         {
-            var request = new PutObjectRequest
+               var request = new PutObjectRequest
             {
                 BucketName = _settings.Bucket,
                 Key = _settings.Prefix + id,
