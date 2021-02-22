@@ -2,9 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 15.0.26730.12
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3Proxy", "..\src\S3ProxyPOC\S3Proxy.csproj", "{D9DC98B4-036A-4F0A-86F4-AD04855031C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3Proxy", "..\src\S3Proxy\S3Proxy.csproj", "{D9DC98B4-036A-4F0A-86F4-AD04855031C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3ProxyHost", "..\src\Host\S3ProxyHost\S3ProxyHost.csproj", "{69E647A3-4351-41E0-B7D9-F1934D9439E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3ProxyHost", "..\src\S3ProxyHost\S3ProxyHost.csproj", "{69E647A3-4351-41E0-B7D9-F1934D9439E2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{01764485-F5F0-4BDA-BEF9-7890FE9BE29F}"
 EndProject

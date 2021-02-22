@@ -6,8 +6,8 @@
       <OutputPath>$(SolutionDir)..\bin\S3ProxyHost\$(Configuration)\</OutputPath>
       <PublishDir>$(OutputPath)\$(TargetFramework)\</PublishDir>
       <DefineConstants>$(DefineConstants);Monitoring</DefineConstants>
-  </PropertyGroup>  
+  </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\S3ProxyPOC\S3Proxy.csproj" />
+    <ProjectReference Include="..\S3Proxy\S3Proxy.csproj" />
   </ItemGroup>
 </Project>
