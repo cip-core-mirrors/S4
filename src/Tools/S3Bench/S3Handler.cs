@@ -51,7 +51,7 @@ namespace ABSA.RD.S4.S3Bench
 
         public void Put(byte[] data, string id)
         {
-               var request = new PutObjectRequest
+            var request = new PutObjectRequest
             {
                 BucketName = _settings.Bucket,
                 Key = _settings.Prefix + id,
