@@ -6,6 +6,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3Proxy", "..\src\S3Proxy\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3ProxyHost", "..\src\S3ProxyHost\S3ProxyHost.csproj", "{69E647A3-4351-41E0-B7D9-F1934D9439E2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{01764485-F5F0-4BDA-BEF9-7890FE9BE29F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3Bench", "..\src\Tools\S3Bench\S3Bench.csproj", "{5CA92C06-7012-4FFD-A98E-4AE0EEB69B29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -18,11 +22,18 @@ Global
 		{D9DC98B4-036A-4F0A-86F4-AD04855031C6}.Release|x64.Build.0 = Release|x64
 		{69E647A3-4351-41E0-B7D9-F1934D9439E2}.Debug|x64.ActiveCfg = Debug|x64
 		{69E647A3-4351-41E0-B7D9-F1934D9439E2}.Debug|x64.Build.0 = Debug|x64
-		{69E647A3-4351-41E0-B7D9-F1934D9439E2}.Release|x64.ActiveCfg = Release|Any CPU
-		{69E647A3-4351-41E0-B7D9-F1934D9439E2}.Release|x64.Build.0 = Release|Any CPU
+		{69E647A3-4351-41E0-B7D9-F1934D9439E2}.Release|x64.ActiveCfg = Release|x64
+		{69E647A3-4351-41E0-B7D9-F1934D9439E2}.Release|x64.Build.0 = Release|x64
+		{5CA92C06-7012-4FFD-A98E-4AE0EEB69B29}.Debug|x64.ActiveCfg = Debug|x64
+		{5CA92C06-7012-4FFD-A98E-4AE0EEB69B29}.Debug|x64.Build.0 = Debug|x64
+		{5CA92C06-7012-4FFD-A98E-4AE0EEB69B29}.Release|x64.ActiveCfg = Release|x64
+		{5CA92C06-7012-4FFD-A98E-4AE0EEB69B29}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5CA92C06-7012-4FFD-A98E-4AE0EEB69B29} = {01764485-F5F0-4BDA-BEF9-7890FE9BE29F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {38401F1F-C8F7-48F9-8045-315E284355BE}
