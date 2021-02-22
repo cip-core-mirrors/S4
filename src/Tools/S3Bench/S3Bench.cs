@@ -109,9 +109,9 @@ namespace ABSA.RD.S4.S3Bench
             var totalSize = totalItems * _settings.ItemSize;
             var speedInBytes = (int)(totalSize / elapsed.TotalSeconds);
             var unit = GetUnit(speedInBytes, out var mulKoef);
-            Console.WriteLine($"{operation,7} | {elapsed} | {(int)(totalItems / elapsed.TotalSeconds), 11} /s | {speedInBytes / mulKoef,11} {unit}/s");
 
-            Console.WriteLine();
+            Console.WriteLine("====================");
+            Console.WriteLine($"{operation,7} | {elapsed} | {(int)(totalItems / elapsed.TotalSeconds),7} /s | {speedInBytes / mulKoef,7} {unit}/s");
         }
 
         private void PrintStats(string title, TimeSpan[] timings, bool withbps)
@@ -130,6 +130,7 @@ namespace ABSA.RD.S4.S3Bench
             Func<TimeSpan, string> time = t => $"{(int)t.TotalMilliseconds,align}";
             Func<TimeSpan, string> speed = t => $"{(int)(_settings.ItemSize / t.TotalSeconds / mulKoef),align}";
 
+            Console.WriteLine();
             Console.WriteLine($"{title,titleAlign}{lbl("AVG")}{lbl("MIN")}{lbl("P10")}{lbl("P25")}{lbl("P50")}{lbl("P75")}{lbl("P90")}{lbl("P95")}{lbl("P99")}{lbl("MAX")}");
             Console.WriteLine($"{" ms",titleAlign}{time(avg)}{time(min)}{time(perc(10))}{time(perc(25))}{time(perc(50))}{time(perc(75))}{time(perc(90))}{time(perc(95))}{time(perc(99))}{time(max)}");
 
@@ -139,7 +140,6 @@ namespace ABSA.RD.S4.S3Bench
                 Console.WriteLine($"{$" {unit}/s",titleAlign}{speed(avg)}{speed(min)}{speed(perc(10))}{speed(perc(25))}{speed(perc(50))}{speed(perc(75))}{speed(perc(90))}{speed(perc(95))}{speed(perc(99))}{speed(max)}");
             }
 
-            Console.WriteLine();
         }
 
         private string GetUnit(int value, out int koef)
