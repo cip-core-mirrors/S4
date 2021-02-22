@@ -50,22 +50,6 @@ namespace ABSA.RD.S4.S3Bench
             _client = new AmazonS3Client(credentials, s3cfg);
         }
 
-        public void Put(byte[] data, string id)
-        {
-            var request = new PutObjectRequest
-            {
-                BucketName = _settings.Bucket,
-                Key = _settings.Prefix + id,
-                InputStream = new MemoryStream(data),
-                ServerSideEncryptionMethod = string.IsNullOrEmpty(_settings.KmsKey) ? ServerSideEncryptionMethod.None : ServerSideEncryptionMethod.AWSKMS,
-                ServerSideEncryptionKeyManagementServiceKeyId = _settings.KmsKey
-            };
-
-            var watch = Stopwatch.StartNew();
-            _client.PutObjectAsync(request).GetAwaiter().GetResult();
-            TimePut.Add(watch.Elapsed);
-        }
-
         public async Task PutAsync(byte[] data, string id)
         {
             var request = new PutObjectRequest
@@ -80,28 +64,6 @@ namespace ABSA.RD.S4.S3Bench
             var watch = Stopwatch.StartNew();
             await _client.PutObjectAsync(request);
             TimePut.Add(watch.Elapsed);
-        }
-
-        public byte[] Get(string id)
-        {
-            var request = new GetObjectRequest
-            {
-                BucketName = _settings.Bucket,
-                Key = _settings.Prefix + id
-            };
-
-            var watch = Stopwatch.StartNew();
-            var response = _client.GetObjectAsync(request).GetAwaiter().GetResult();
-            var result = new byte[response.ContentLength];
-            result[0] = (byte)response.ResponseStream.ReadByte();
-            TimeGetFirstByte.Add(watch.Elapsed);
-
-            var index = 1;
-            while (index < result.Length)
-                index += response.ResponseStream.Read(result, index, result.Length - index);
-            TimeGetLastByte.Add(watch.Elapsed);
-
-            return result;
         }
 
         public async Task<byte[]> GetAsync(string id)
@@ -124,19 +86,6 @@ namespace ABSA.RD.S4.S3Bench
             TimeGetLastByte.Add(watch.Elapsed);
 
             return result;
-        }
-
-        public void Delete(string id)
-        {
-            var request = new DeleteObjectRequest
-            {
-                BucketName = _settings.Bucket,
-                Key = _settings.Prefix + id
-            };
-
-            var watch = Stopwatch.StartNew();
-            _client.DeleteObjectAsync(request).GetAwaiter().GetResult();
-            TimeDelete.Add(watch.Elapsed);
         }
 
         public async Task DeleteAsync(string id)

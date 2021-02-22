@@ -63,10 +63,7 @@ namespace ABSA.RD.S4.S3Bench
             var watch = Stopwatch.StartNew();
             var tasks = new Task[_settings.ParallelTasks];
             for (var i = 0; i < tasks.Length; ++i)
-            {
-                var local = i;
-                tasks[i] = action(local);
-            }
+                tasks[i] = action(i);
 
             await Task.WhenAll(tasks);
 
