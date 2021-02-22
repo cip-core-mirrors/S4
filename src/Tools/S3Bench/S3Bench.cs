@@ -21,9 +21,9 @@ namespace ABSA.RD.S4.S3Bench
 
         public async Task RunTestAsync()
         {
-            Console.WriteLine($"Threads:      {_settings.Threads}");
-            Console.WriteLine($"Items/Thread: {_settings.ItemsPerThread}");
-            Console.WriteLine($"Item Size:    {_settings.ItemSize}");
+            Console.WriteLine($"ParallelTasks: {_settings.ParallelTasks}");
+            Console.WriteLine($"Items/Task:    {_settings.ItemsPerTask}");
+            Console.WriteLine($"Item Size:     {_settings.ItemSize}");
 
             await RunPutsAsync();
             for (var i = 0; i < _settings.Iterations; ++i)
@@ -33,7 +33,7 @@ namespace ABSA.RD.S4.S3Bench
 
         private async Task RunPutsAsync()
         {
-            var elapsed = FireThreadsAsync(threadIndex => PutLoopAsync(threadIndex));
+            var elapsed = RunParallelTasksAsync(threadIndex => PutLoopAsync(threadIndex));
             PrintTotals("PUT", await elapsed);
             PrintStats("Request", _handler.TimePut.ToArray(), true);
         }
@@ -43,7 +43,7 @@ namespace ABSA.RD.S4.S3Bench
             _handler.TimeGetFirstByte.Clear();
             _handler.TimeGetLastByte.Clear();
 
-            var elapsed = FireThreadsAsync(threadIndex => GetLoopAsync(threadIndex));
+            var elapsed = RunParallelTasksAsync(threadIndex => GetLoopAsync(threadIndex));
 
             PrintTotals("GET", await elapsed);
             PrintStats("Delay", _handler.TimeGetFirstByte.ToArray(), false);
@@ -52,16 +52,16 @@ namespace ABSA.RD.S4.S3Bench
 
         private async Task RunDeletesAsync()
         {
-            var elapsed = FireThreadsAsync(threadIndex => DeleteLoopAsync(threadIndex));
+            var elapsed = RunParallelTasksAsync(threadIndex => DeleteLoopAsync(threadIndex));
 
             PrintTotals("DELETE", await elapsed);
             PrintStats("Request", _handler.TimeDelete.ToArray(), true);
         }
 
-        private async Task<TimeSpan> FireThreadsAsync(Func<int, Task> action)
+        private async Task<TimeSpan> RunParallelTasksAsync(Func<int, Task> action)
         {
             var watch = Stopwatch.StartNew();
-            var tasks = new Task[_settings.Threads];
+            var tasks = new Task[_settings.ParallelTasks];
             for (var i = 0; i < tasks.Length; ++i)
             {
                 var local = i;
@@ -77,7 +77,7 @@ namespace ABSA.RD.S4.S3Bench
         {
             var item = new byte[_settings.ItemSize];
 
-            for (var i = 0; i < _settings.ItemsPerThread; ++i)
+            for (var i = 0; i < _settings.ItemsPerTask; ++i)
             {
                 for (var j = 0; j < item.Length; ++j)
                     item[j] = (byte)(i + j + threadIndex);
@@ -88,19 +88,19 @@ namespace ABSA.RD.S4.S3Bench
 
         private async Task GetLoopAsync(int threadIndex)
         {
-            for (var i = 0; i < _settings.ItemsPerThread; ++i)
+            for (var i = 0; i < _settings.ItemsPerTask; ++i)
                 await _handler.GetAsync($"T{threadIndex}I{i}");
         }
 
         private async Task DeleteLoopAsync(int threadIndex)
         {
-            for (var i = 0; i < _settings.ItemsPerThread; ++i)
+            for (var i = 0; i < _settings.ItemsPerTask; ++i)
                 await _handler.DeleteAsync($"T{threadIndex}I{i}");
         }
 
         private void PrintTotals(string operation, TimeSpan elapsed)
         {
-            var totalItems = _settings.Threads * _settings.ItemsPerThread;
+            var totalItems = _settings.ParallelTasks * _settings.ItemsPerTask;
             var totalSize = totalItems * _settings.ItemSize;
             var speedInBytes = (int)(totalSize / elapsed.TotalSeconds);
             var unit = GetUnit(speedInBytes, out var mulKoef);

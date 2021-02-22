@@ -2,9 +2,9 @@
 {
     public class BenchSettings
     {
-        public int Threads { get; set; }
+        public int ParallelTasks { get; set; }
         public int ItemSize { get; set; }
-        public int ItemsPerThread { get; set; }
+        public int ItemsPerTask { get; set; }
         public int Iterations { get; set; }
     }
 }
