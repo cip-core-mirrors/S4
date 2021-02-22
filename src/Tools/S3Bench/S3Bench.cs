@@ -2,7 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 
 namespace ABSA.RD.S4.S3Bench
 {
@@ -12,7 +12,6 @@ namespace ABSA.RD.S4.S3Bench
 
         private readonly S3Handler _handler;
         private readonly BenchSettings _settings;
-        private readonly ManualResetEvent _synchro = new ManualResetEvent(false);
 
         public S3Bench(S3Handler handler, BenchSettings settings)
         {
@@ -20,65 +19,61 @@ namespace ABSA.RD.S4.S3Bench
             _settings = settings;
         }
 
-        public void RunTest()
+        public async Task RunTestAsync()
         {
             Console.WriteLine($"Threads:      {_settings.Threads}");
             Console.WriteLine($"Items/Thread: {_settings.ItemsPerThread}");
             Console.WriteLine($"Item Size:    {_settings.ItemSize}");
 
-            RunPuts();
+            await RunPutsAsync();
             for (var i = 0; i < _settings.Iterations; ++i)
-                RunGets();
-            RunDeletes();
+                await RunGetsAsync();
+            await RunDeletesAsync();
         }
 
-        private void RunPuts()
+        private async Task RunPutsAsync()
         {
-            var elapsed = FireThreads(threadIndex => PutLoop(threadIndex));
-            PrintTotals("PUT", elapsed);
+            var elapsed = FireThreadsAsync(threadIndex => PutLoopAsync(threadIndex));
+            PrintTotals("PUT", await elapsed);
             PrintStats("Request", _handler.TimePut.ToArray(), true);
         }
 
-        private void RunGets()
+        private async Task RunGetsAsync()
         {
             _handler.TimeGetFirstByte.Clear();
             _handler.TimeGetLastByte.Clear();
 
-            var elapsed = FireThreads(threadIndex => GetLoop(threadIndex));
+            var elapsed = FireThreadsAsync(threadIndex => GetLoopAsync(threadIndex));
 
-            PrintTotals("GET", elapsed);
+            PrintTotals("GET", await elapsed);
             PrintStats("Delay", _handler.TimeGetFirstByte.ToArray(), false);
             PrintStats("Request", _handler.TimeGetLastByte.ToArray(), true);
         }
 
-        private void RunDeletes()
+        private async Task RunDeletesAsync()
         {
-            var elapsed = FireThreads(threadIndex => DeleteLoop(threadIndex));
+            var elapsed = FireThreadsAsync(threadIndex => DeleteLoopAsync(threadIndex));
 
-            PrintTotals("DELETE", elapsed);
+            PrintTotals("DELETE", await elapsed);
             PrintStats("Request", _handler.TimeDelete.ToArray(), true);
         }
 
-        private TimeSpan FireThreads(Action<int> action)
+        private async Task<TimeSpan> FireThreadsAsync(Func<int, Task> action)
         {
             var watch = Stopwatch.StartNew();
-            _synchro.Reset();
-            var threads = new Thread[_settings.Threads];
-            for (var i = 0; i < threads.Length; ++i)
+            var tasks = new Task[_settings.Threads];
+            for (var i = 0; i < tasks.Length; ++i)
             {
                 var local = i;
-                threads[i] = new Thread(() => action(local));
-                threads[i].Start();
+                tasks[i] = action(local);
             }
 
-            _synchro.Set();
-            foreach (var thread in threads)
-                thread.Join();
+            await Task.WhenAll(tasks);
 
             return watch.Elapsed;
         }
 
-        private void PutLoop(int threadIndex)
+        private async Task PutLoopAsync(int threadIndex)
         {
             var item = new byte[_settings.ItemSize];
 
@@ -87,20 +82,20 @@ namespace ABSA.RD.S4.S3Bench
                 for (var j = 0; j < item.Length; ++j)
                     item[j] = (byte)(i + j + threadIndex);
 
-                _handler.Put(item, $"T{threadIndex}I{i}");
+                await _handler.PutAsync(item, $"T{threadIndex}I{i}");
             }
         }
 
-        private void GetLoop(int threadIndex)
+        private async Task GetLoopAsync(int threadIndex)
         {
             for (var i = 0; i < _settings.ItemsPerThread; ++i)
-                _handler.Get($"T{threadIndex}I{i}");
+                await _handler.GetAsync($"T{threadIndex}I{i}");
         }
 
-        private void DeleteLoop(int threadIndex)
+        private async Task DeleteLoopAsync(int threadIndex)
         {
             for (var i = 0; i < _settings.ItemsPerThread; ++i)
-                _handler.Delete($"T{threadIndex}I{i}");
+                await _handler.DeleteAsync($"T{threadIndex}I{i}");
         }
 
         private void PrintTotals(string operation, TimeSpan elapsed)

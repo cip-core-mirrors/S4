@@ -9,6 +9,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace ABSA.RD.S4.S3Bench
 {
@@ -65,6 +66,22 @@ namespace ABSA.RD.S4.S3Bench
             TimePut.Add(watch.Elapsed);
         }
 
+        public async Task PutAsync(byte[] data, string id)
+        {
+            var request = new PutObjectRequest
+            {
+                BucketName = _settings.Bucket,
+                Key = _settings.Prefix + id,
+                InputStream = new MemoryStream(data),
+                ServerSideEncryptionMethod = string.IsNullOrEmpty(_settings.KmsKey) ? ServerSideEncryptionMethod.None : ServerSideEncryptionMethod.AWSKMS,
+                ServerSideEncryptionKeyManagementServiceKeyId = _settings.KmsKey
+            };
+
+            var watch = Stopwatch.StartNew();
+            await _client.PutObjectAsync(request);
+            TimePut.Add(watch.Elapsed);
+        }
+
         public byte[] Get(string id)
         {
             var request = new GetObjectRequest
@@ -87,6 +104,28 @@ namespace ABSA.RD.S4.S3Bench
             return result;
         }
 
+        public async Task<byte[]> GetAsync(string id)
+        {
+            var request = new GetObjectRequest
+            {
+                BucketName = _settings.Bucket,
+                Key = _settings.Prefix + id
+            };
+
+            var watch = Stopwatch.StartNew();
+            var response = await _client.GetObjectAsync(request);
+            var result = new byte[response.ContentLength];
+            result[0] = (byte)response.ResponseStream.ReadByte();
+            TimeGetFirstByte.Add(watch.Elapsed);
+
+            var index = 1;
+            while (index < result.Length)
+                index += await response.ResponseStream.ReadAsync(result, index, result.Length - index);
+            TimeGetLastByte.Add(watch.Elapsed);
+
+            return result;
+        }
+
         public void Delete(string id)
         {
             var request = new DeleteObjectRequest
@@ -97,6 +136,19 @@ namespace ABSA.RD.S4.S3Bench
 
             var watch = Stopwatch.StartNew();
             _client.DeleteObjectAsync(request).GetAwaiter().GetResult();
+            TimeDelete.Add(watch.Elapsed);
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            var request = new DeleteObjectRequest
+            {
+                BucketName = _settings.Bucket,
+                Key = _settings.Prefix + id
+            };
+
+            var watch = Stopwatch.StartNew();
+            await _client.DeleteObjectAsync(request);
             TimeDelete.Add(watch.Elapsed);
         }
     }
