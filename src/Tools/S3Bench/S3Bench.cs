@@ -25,17 +25,23 @@ namespace ABSA.RD.S4.S3Bench
             Console.WriteLine($"Items/Task:    {_settings.ItemsPerTask}");
             Console.WriteLine($"Item Size:     {_settings.ItemSize}");
 
+            var watch = Stopwatch.StartNew();
             await RunPutsAsync();
             for (var i = 0; i < _settings.Iterations; ++i)
                 await RunGetsAsync();
             await RunDeletesAsync();
+            watch.Stop();
+
+            var memUsage = Process.GetCurrentProcess().PeakWorkingSet64;
+            var unit = GetUnit(memUsage, out var mulKoef);
+            Console.WriteLine($"FINISHED in {watch.Elapsed} with {memUsage / mulKoef} {unit} Peak Workset");
         }
 
         private async Task RunPutsAsync()
         {
             var elapsed = RunParallelTasksAsync(threadIndex => PutLoopAsync(threadIndex));
             PrintTotals("PUT", await elapsed);
-            PrintStats("Request", _handler.TimePut.ToArray(), true);
+            PrintStats( _handler.TimePut.ToArray());
         }
 
         private async Task RunGetsAsync()
@@ -44,18 +50,15 @@ namespace ABSA.RD.S4.S3Bench
             _handler.TimeGetLastByte.Clear();
 
             var elapsed = RunParallelTasksAsync(threadIndex => GetLoopAsync(threadIndex));
-
             PrintTotals("GET", await elapsed);
-            PrintStats("Delay", _handler.TimeGetFirstByte.ToArray(), false);
-            PrintStats("Request", _handler.TimeGetLastByte.ToArray(), true);
+            PrintStats(_handler.TimeGetLastByte.ToArray(), _handler.TimeGetFirstByte.ToArray());
         }
 
         private async Task RunDeletesAsync()
         {
             var elapsed = RunParallelTasksAsync(threadIndex => DeleteLoopAsync(threadIndex));
-
             PrintTotals("DELETE", await elapsed);
-            PrintStats("Request", _handler.TimeDelete.ToArray(), true);
+            PrintStats(_handler.TimeDelete.ToArray());
         }
 
         private async Task<TimeSpan> RunParallelTasksAsync(Func<int, Task> action)
@@ -98,47 +101,53 @@ namespace ABSA.RD.S4.S3Bench
         private void PrintTotals(string operation, TimeSpan elapsed)
         {
             var totalItems = _settings.ParallelTasks * _settings.ItemsPerTask;
-            var totalSize = totalItems * _settings.ItemSize;
-            var speedInBytes = (int)(totalSize / elapsed.TotalSeconds);
+            var totalSize = (long)totalItems * _settings.ItemSize;
+            var speedInBytes = (long)(totalSize / elapsed.TotalSeconds);
             var unit = GetUnit(speedInBytes, out var mulKoef);
 
             Console.WriteLine("====================");
             Console.WriteLine($"{operation,7} | {elapsed} | {(int)(totalItems / elapsed.TotalSeconds),7} /s | {speedInBytes / mulKoef,7} {unit}/s");
         }
 
-        private void PrintStats(string title, TimeSpan[] timings, bool withbps)
+        private void PrintStats(TimeSpan[] timings, TimeSpan[] delay = null)
         {
-            Array.Sort(timings);
+            const int align = 6;
+            const int titleAlign = 10;
 
-            const int align = 7;
-            const int titleAlign = 7;
-            var mulKoef = 1;
+            string lbl(string l) => $"{l,align}";
+            Console.WriteLine();
+            Console.WriteLine($"{"",titleAlign}{lbl("AVG")}{lbl("MIN")}{lbl("P10")}{lbl("P25")}{lbl("P50")}{lbl("P75")}{lbl("P90")}{lbl("P95")}{lbl("P99")}{lbl("MAX")}");
+
+            string time(TimeSpan t) => $"{(int)t.TotalMilliseconds,align}";
+            if (delay != null)
+            {
+                Array.Sort(delay);
+                PrintStats_Row($"{"delay ms",titleAlign}", delay, time);
+            }
+
+            Array.Sort(timings);
+            PrintStats_Row($"{"req ms",titleAlign}", timings, time);
+
+            var min = timings[0];
+            var unit = GetUnit((int)(_settings.ItemSize / min.TotalSeconds), out var mulKoef);
+            string speed(TimeSpan t) => $"{(int)(_settings.ItemSize / t.TotalSeconds / mulKoef),align}";
+            PrintStats_Row($"{$" {unit}/s",titleAlign}", timings, speed);
+        }
+
+       private void PrintStats_Row(string title, TimeSpan[] timings, Func<TimeSpan, string> prn)
+        {
             var min = timings[0];
             var avg = TimeSpan.FromSeconds(timings.Average(x => x.TotalSeconds));
             var max = timings[^1];
-            
-            Func<int, TimeSpan> perc = p => timings[timings.Length * p / 100];
-            Func<string, string> lbl = l => $"{l,align}";
-            Func<TimeSpan, string> time = t => $"{(int)t.TotalMilliseconds,align}";
-            Func<TimeSpan, string> speed = t => $"{(int)(_settings.ItemSize / t.TotalSeconds / mulKoef),align}";
-
-            Console.WriteLine();
-            Console.WriteLine($"{title,titleAlign}{lbl("AVG")}{lbl("MIN")}{lbl("P10")}{lbl("P25")}{lbl("P50")}{lbl("P75")}{lbl("P90")}{lbl("P95")}{lbl("P99")}{lbl("MAX")}");
-            Console.WriteLine($"{" ms",titleAlign}{time(avg)}{time(min)}{time(perc(10))}{time(perc(25))}{time(perc(50))}{time(perc(75))}{time(perc(90))}{time(perc(95))}{time(perc(99))}{time(max)}");
-
-            if (withbps)
-            {
-                var unit = GetUnit((int)(_settings.ItemSize / min.TotalSeconds), out mulKoef);
-                Console.WriteLine($"{$" {unit}/s",titleAlign}{speed(avg)}{speed(min)}{speed(perc(10))}{speed(perc(25))}{speed(perc(50))}{speed(perc(75))}{speed(perc(90))}{speed(perc(95))}{speed(perc(99))}{speed(max)}");
-            }
-
+            TimeSpan perc(int p) => timings[timings.Length * p / 100];
+            Console.WriteLine($"{title}{prn(avg)}{prn(min)}{prn(perc(10))}{prn(perc(25))}{prn(perc(50))}{prn(perc(75))}{prn(perc(90))}{prn(perc(95))}{prn(perc(99))}{prn(max)}");
         }
 
-        private string GetUnit(int value, out int koef)
+        private string GetUnit(long value, out int koef)
         {
             var index = 0;
             koef = 1;
-            while (value > 1024)
+            while (value > 1024 && index < Mul.Length)
             {
                 koef *= 1024;
                 value /= 1024;
