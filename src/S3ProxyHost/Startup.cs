@@ -45,9 +45,9 @@ namespace ABSA.RD.S4.S3ProxyHost
 
             var config = new S3Config
             {
-                Region = Configuration["S3:Region"],
-                KmsKey = Configuration["S3:KmsKey"],
-                CredentialsProfile = new CredentialProfileStoreChain().TryGetAWSCredentials(Configuration["S3:CredentialsProfile"], out var _) ? Configuration["S3:CredentialsProfile"] : null
+                Region = Configuration["AWS_S3_REGION"],
+                KmsKey = Configuration["AWS_S3_KMS_KEY"],
+                CredentialsProfile = new CredentialProfileStoreChain().TryGetAWSCredentials(Configuration["AWS_S3_PROFILE"], out var _) ? Configuration["AWS_S3_PROFILE"] : null
             };
 
             services.AddS3Proxy(config);
