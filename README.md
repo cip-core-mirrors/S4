@@ -3,6 +3,7 @@
 ## About
 S4 is adapter on top of AWS S3 handling caching, deduplication, folder compression.
 The goal of S4 is to reduce the cost of object stored in S3 while allowing for faster access than Glacier. 
+S4 will also facilitate list operation and single item extraction operations on compressed archives stored in S3 without the need to retrieve the full archive.
 
 ## Solution structure
 |Directory | Description                                         |
