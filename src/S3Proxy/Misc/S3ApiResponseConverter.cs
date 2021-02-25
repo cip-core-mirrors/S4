@@ -1,12 +1,21 @@
 ﻿using Amazon.S3.Model;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace ABSA.RD.S4.S3Proxy.Misc
 {
+    /// <summary>
+    /// Defines a common operation for converting, extracting and transformation S3 api responses
+    /// </summary>
     public static class S3ApiResponseConverter
     {
+        /// <summary>
+        /// Converts <seealso cref="ListBucketsResponse"/> into XML view.
+        /// </summary>
+        /// <param name="response">Source <seealso cref="ListBucketsResponse"/></param>
+        /// <returns>XML view of the <seealso cref="ListBucketsResponse"/>.</returns>
         public static XElement ToXml(this ListBucketsResponse response)
         {
             var buckets =
@@ -17,8 +26,13 @@ namespace ABSA.RD.S4.S3Proxy.Misc
 
             return new XElement("ListAllMyBucketsResult",
                     new XElement("Buckets", buckets));
-        } 
+        }
 
+        /// <summary>
+        /// Converts <seealso cref="ListObjectsV2Response"/> into XML view.
+        /// </summary>
+        /// <param name="response">Source <seealso cref="ListObjectsV2Response"/>.</param>
+        /// <returns>XML view of the <seealso cref="ListObjectsV2Response"/></returns>
         public static XElement ToXml(this ListObjectsV2Response response)
         {
             var contents = new XElement[response.S3Objects.Count];
@@ -84,6 +98,11 @@ namespace ABSA.RD.S4.S3Proxy.Misc
             return result;
         }
 
+        /// <summary>
+        /// Extracts all headers values from the <seealso cref="GetObjectResponse"/>.
+        /// </summary>
+        /// <param name="response">Source <seealso cref="GetObjectResponse"/></param>
+        /// <returns>Collection of headers being extracted from the specified <seealso cref="GetObjectResponse"/>.</returns>
         public static Dictionary<string, string> ExtractHeaders(GetObjectResponse response)
         {
             var headers = response.Headers.Keys.ToDictionary(x => x, x => response.Headers[x]);
@@ -158,6 +177,21 @@ namespace ABSA.RD.S4.S3Proxy.Misc
                 headers.TryAdd(S3Response.Names.ContentEncoding, response.Headers.ContentEncoding);
 
             return headers;
+        }
+
+        /// <summary>
+        /// Reads response data from the <seealso cref="GetObjectResponse"/>.
+        /// </summary>
+        /// <param name="response">Source <seealso cref="GetObjectResponse"/> where data will be read from.</param>
+        /// <returns>Response data as array of bytes.</returns>
+        public static async Task<byte[]> ReadData(this GetObjectResponse response)
+        {
+            var data = new byte[response.ContentLength];
+            var start = 0;
+            while (start < data.Length)
+                start += await response.ResponseStream.ReadAsync(data, start, data.Length - start);
+
+            return data;
         }
     }
 }

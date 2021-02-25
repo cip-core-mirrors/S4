@@ -83,12 +83,8 @@ namespace ABSA.RD.S4.S3Proxy.Proxy
                 request.PartNumber = s3Request.PartNumber;
 
             var @object = await _s3.GetObjectAsync(request);
+            var data = await @object.ReadData();
 
-            var data = new byte[@object.ContentLength];
-            var start = 0;
-            while (start < data.Length)
-                start += await @object.ResponseStream.ReadAsync(data, start, data.Length - start);
-            
             return new ProxyResponse
             {
                 ContentType = @object.Headers.ContentType,

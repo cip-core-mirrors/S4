@@ -10,6 +10,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{01764485
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3Bench", "..\src\Tools\S3Bench\S3Bench.csproj", "{5CA92C06-7012-4FFD-A98E-4AE0EEB69B29}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{CA55FAAC-134F-4738-844D-0108A0F5187E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZipLib", "..\src\Libraries\ZipLib\ZipLib.csproj", "{D317DE64-4834-4D1A-A3EB-8EC1062513B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -28,12 +32,17 @@ Global
 		{5CA92C06-7012-4FFD-A98E-4AE0EEB69B29}.Debug|x64.Build.0 = Debug|x64
 		{5CA92C06-7012-4FFD-A98E-4AE0EEB69B29}.Release|x64.ActiveCfg = Release|x64
 		{5CA92C06-7012-4FFD-A98E-4AE0EEB69B29}.Release|x64.Build.0 = Release|x64
+		{D317DE64-4834-4D1A-A3EB-8EC1062513B3}.Debug|x64.ActiveCfg = Debug|x64
+		{D317DE64-4834-4D1A-A3EB-8EC1062513B3}.Debug|x64.Build.0 = Debug|x64
+		{D317DE64-4834-4D1A-A3EB-8EC1062513B3}.Release|x64.ActiveCfg = Release|x64
+		{D317DE64-4834-4D1A-A3EB-8EC1062513B3}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5CA92C06-7012-4FFD-A98E-4AE0EEB69B29} = {01764485-F5F0-4BDA-BEF9-7890FE9BE29F}
+		{D317DE64-4834-4D1A-A3EB-8EC1062513B3} = {CA55FAAC-134F-4738-844D-0108A0F5187E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {38401F1F-C8F7-48F9-8045-315E284355BE}

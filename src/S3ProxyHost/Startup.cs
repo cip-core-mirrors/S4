@@ -9,7 +9,6 @@ using NLog;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using ABSA.RD.S4.S3ProxyHost.Misc;
-using Microsoft.AspNetCore.Diagnostics;
 using System.Text;
 using System;
 
