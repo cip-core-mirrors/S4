@@ -2,6 +2,7 @@
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Linq;
 
 namespace ABSA.RD.S4.S3Proxy
 {
@@ -66,7 +67,7 @@ namespace ABSA.RD.S4.S3Proxy
             {
                 Method = request.Method,
                 Bucket = paths.Length > 0 ? paths[0] : null,
-                Key = paths.Length > 1 ? paths[1] : null,
+                Key = paths.Length > 1 ? string.Join('/', paths.Skip(1)) : null,
                 ContinuationToken = request.Query.GetValue(Names.ContinuationToken),
                 Delimeter = request.Query.GetValue(Names.Delimeter),
                 EncodingType = request.Query.GetValue(Names.EncodingType),
