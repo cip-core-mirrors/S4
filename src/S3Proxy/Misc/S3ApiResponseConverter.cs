@@ -193,42 +193,5 @@ namespace ABSA.RD.S4.S3Proxy.Misc
 
             return data;
         }
-
-        public static GetObjectResponse Clone(this GetObjectResponse @object)
-        {
-            return new GetObjectResponse
-            {
-                ServerSideEncryptionMethod = @object.ServerSideEncryptionMethod,
-                ServerSideEncryptionCustomerMethod = @object.ServerSideEncryptionCustomerMethod,
-                ServerSideEncryptionKeyManagementServiceKeyId = @object.ServerSideEncryptionKeyManagementServiceKeyId,
-                AcceptRanges = @object.AcceptRanges,
-                StorageClass = @object.StorageClass,
-                DeleteMarker = @object.DeleteMarker,
-                HttpStatusCode = @object.HttpStatusCode,
-                ETag = @object.ETag,
-                ContentRange = @object.ContentRange,
-                BucketKeyEnabled = @object.BucketKeyEnabled,
-                Expiration = @object.Expiration,
-                Expires = @object.Expires,
-                BucketName = @object.BucketName,
-                Key = @object.Key,
-                LastModified = @object.LastModified,
-                MissingMeta = @object.MissingMeta,
-                ObjectLockLegalHoldStatus = @object.ObjectLockLegalHoldStatus,
-                ObjectLockMode = @object.ObjectLockMode,
-                ObjectLockRetainUntilDate = @object.ObjectLockRetainUntilDate,
-                PartsCount = @object.PartsCount,
-                ReplicationStatus = @object.ReplicationStatus,
-                TagCount = @object.TagCount,
-                WebsiteRedirectLocation = @object.WebsiteRedirectLocation,
-                RequestCharged = @object.RequestCharged,
-                ResponseMetadata = @object.ResponseMetadata,
-                RestoreInProgress = @object.RestoreInProgress,
-                RestoreExpiration = @object.RestoreExpiration,
-                ContentLength = @object.ContentLength,
-                VersionId = @object.VersionId,
-                ResponseStream = @object.ResponseStream
-            };
-        }
     }
 }

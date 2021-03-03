@@ -16,12 +16,7 @@ namespace ABSA.RD.S4.S3Proxy.S3Client.Archives
         public void Save(string reference, ArchiveInfo zipInfo)
         {
             lock (_locker)
-            {
-                if (_storage.ContainsKey(reference))
-                    _storage[reference] = zipInfo;
-                else
-                    _storage.Add(reference, zipInfo);
-            }
+                _storage[reference] = zipInfo;
         }
     }
 }
