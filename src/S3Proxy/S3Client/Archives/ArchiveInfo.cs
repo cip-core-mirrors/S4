@@ -2,9 +2,6 @@
 
 namespace ABSA.RD.S4.S3Proxy.S3Client.Archives
 {
-    /// <summary>
-    /// Determines archive entry information like entry offsets, sizes e.t.c.
-    /// </summary>
     class ArchiveInfo
     {
         public ArchiveEntryInfo[] Entries { get; set; }
